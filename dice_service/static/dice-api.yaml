@@ -1,7 +1,7 @@
 swagger: '2.0'
 info:
   title: Dice Service
-  version: '0.1'
+  version: '1.0'
 host: localhost
 schemes:
   - http
@@ -26,6 +26,32 @@ paths:
         '204':
           description: No Content
 
+    post:
+      operationId: addSet
+      summary: addSet
+      description: Add a new set (with 6 dice)
+      parameters:
+        - in: body
+          name: body
+          schema:
+            type: object
+            properties:
+              name:
+                type: string
+              dice:
+                type: array
+                items:
+                  $ref: '#/definitions/Die'
+        - in: path
+          type: integer
+          name: id_set
+          required: true
+      responses:
+        '200':
+          description: OK
+        '400':
+          description: 'Some information are missing'
+
   /sets/{id_set}:
     get:
       operationId: getSet
@@ -42,7 +68,22 @@ paths:
           schema:
             $ref: '#/definitions/DiceSet'
         '404':
-          description: Not Found
+          description: "DiceSet not found"
+
+    delete:
+      operationId: deleteSet
+      summary: deleteSet
+      description: Delete a specific set
+      parameters:
+        - in: path
+          type: integer
+          name: id_set
+          required: true
+      responses:
+        '200':
+          description: "DiceSet successfully deleted"
+        '404':
+          description: "DiceSet not found"
 
   /sets/{id_set}/roll:
     post:
@@ -61,6 +102,10 @@ paths:
                   type: integer
                 figure:
                   type: string
+        '404':
+          description: DiceSet not found or dice_number not present
+        '400':
+          description: Incorrect number of dice
       parameters:
         - in: body
           name: dice_number

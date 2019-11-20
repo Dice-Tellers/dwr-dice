@@ -13,16 +13,25 @@ class DiceSet(db.Model):
     id = db.Column(db.Integer, primary_key=True, autoincrement=True)
     name = db.Column(db.Unicode(128), nullable=False)
 
+    # add a relation with Die table, to deleted on cascade when a DiceSet is removed
+    dice = relationship("Die", cascade="all, delete-orphan")
+
     def to_json(self):
         dice = Die.query.filter_by(id_set=self.id).all()
         return {'id': self.id, 'name': self.name,
                 'dice': [die.to_json() for die in dice]}
 
+    def to_json_light(self):
+        return {'id': self.id, 'name': self.name}
+
     def roll_set(self, dice_number):
         dice_indexes = rnd.sample(range(1, 7), dice_number)
         dice = Die.query.filter(and_(Die.id_set == self.id, Die.number.in_(dice_indexes)))
+        result = {}
+        for die in dice:
+            result.update(die.roll_die())
 
-        return [die.roll_die() for die in dice]
+        return result
 
 
 class Die(db.Model):
