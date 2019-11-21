@@ -26,7 +26,7 @@ def _new_set():
                 abort(400, "DiceSet must be formed by 6 dice of 6 figures each one")
             # check if the set already exists
             elif DiceSet.query.filter(DiceSet.name == body['name']).first() is not None:
-                abort(400, "A DiceSet called {} already exists".format(body['name']))
+                abort(409, "A DiceSet called {} already exists".format(body['name']))
             else:
                 # add new DiceSet
                 new_set = DiceSet()

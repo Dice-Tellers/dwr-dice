@@ -47,6 +47,8 @@ paths:
           description: 'DiceSet successfully created'
         '400':
           description: 'Some information are missing'
+        '409':
+          description: 'Already existing DiceSet'
 
   /sets/{id_set}:
     get:

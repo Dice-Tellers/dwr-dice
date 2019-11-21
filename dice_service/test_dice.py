@@ -91,7 +91,7 @@ class TestDice(flask_testing.TestCase):
         # try to create an already existing dice
 
         result = self.client.post('/sets', data=json.dumps(data), content_type='application/json')
-        self.assertEqual(result.status_code, 400)
+        self.assertEqual(result.status_code, 409)
         self.assertDescription(result, "A DiceSet called {} already exists".format(data['name']))
 
     def test_get_all_sets(self):
