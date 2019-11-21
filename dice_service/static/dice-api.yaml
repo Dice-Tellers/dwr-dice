@@ -42,13 +42,9 @@ paths:
                 type: array
                 items:
                   $ref: '#/definitions/Die'
-        - in: path
-          type: integer
-          name: id_set
-          required: true
       responses:
-        '200':
-          description: OK
+        '201':
+          description: 'DiceSet successfully created'
         '400':
           description: 'Some information are missing'
 

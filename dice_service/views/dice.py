@@ -22,7 +22,7 @@ def _new_set():
         else:
             # must have 6 dice, with 6 figures each one
             new_dice = body['dice']
-            if len(new_dice) != 6 or not (len(d) == 6 for d in new_dice):
+            if len(new_dice) != 6 or not all((len(d) == 6 for d in new_dice)):
                 abort(400, "DiceSet must be formed by 6 dice of 6 figures each one")
             # check if the set already exists
             elif DiceSet.query.filter(DiceSet.name == body['name']).first() is not None:
@@ -45,7 +45,7 @@ def _new_set():
                     db.session.commit()
                     number += 1
 
-                return jsonify(id_set=new_set.id, message="DiceSet successfully added")
+                return jsonify(id_set=new_set.id, description="DiceSet successfully added"), 201
 
 
 @dice.operation('getSet')
@@ -67,7 +67,7 @@ def _delete_set(id_set):
     else:
         db.session.delete(asked_set)
         db.session.commit()
-        return jsonify(message="DiceSet successfully deleted")
+        return jsonify(description="DiceSet successfully deleted")
 
 
 @dice.operation('getSets')
@@ -83,6 +83,8 @@ def _sets():
 def _roll_set(id_set):
     asked_set = DiceSet.query.filter_by(id=id_set).first()
     # check correctness of request body
+    if asked_set is None:
+        abort(404, 'DiceSet not found')
     if not request.is_json:
         abort(400, "Not valid request body")
     # check presence of 'dice_number' into request body
@@ -92,7 +94,5 @@ def _roll_set(id_set):
     elif request.json['dice_number'] not in range(2, 7):
         abort(400, "Number of dice to roll must be between 2 and 6")
     # check presence of requested set into the db
-    elif asked_set is None:
-        abort(404, 'DiceSet not found')
     else:
         return jsonify(asked_set.roll_set(request.json['dice_number']))

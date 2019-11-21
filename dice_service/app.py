@@ -5,7 +5,7 @@ from .urls import DEFAULT_DB, TEST_DB
 from .views import blueprints
 
 
-def create_app(database=DEFAULT_DB, wtf=False, login_disabled=False):
+def create_app(database=DEFAULT_DB, wtf=False):
     flask_app = Flask(__name__)
     flask_app.config['TESTING'] = (database == TEST_DB)
     flask_app.config['WTF_CSRF_SECRET_KEY'] = 'A SECRET KEY'
@@ -13,7 +13,6 @@ def create_app(database=DEFAULT_DB, wtf=False, login_disabled=False):
     flask_app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
     flask_app.config['SQLALCHEMY_DATABASE_URI'] = database
     flask_app.config['WTF_CSRF_ENABLED'] = wtf
-    flask_app.config['LOGIN_DISABLED'] = login_disabled
 
     for bp in blueprints:
         flask_app.register_blueprint(bp)
