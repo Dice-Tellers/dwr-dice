@@ -5,7 +5,7 @@ from flask import jsonify, abort, request
 
 from dice_service.database import DiceSet, Die, db
 
-YML = os.path.join(os.path.dirname(__file__), '..', 'static', 'dice-api.yaml')
+YML = os.path.join(os.path.dirname(__file__), 'dice-api.yaml')
 dice = SwaggerBlueprint('dice', '__name__', swagger_spec=YML)
 
 
