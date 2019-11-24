@@ -91,8 +91,8 @@ def _roll_set(id_set):
     elif "dice_number" not in request.json or request.json['dice_number'] is None:
         abort(400, "Specify number of dice you want to roll")
     # check validity of 'dice_number'
-    elif request.json['dice_number'] not in range(2, 7):
+    elif int(request.json['dice_number']) not in range(2, 7):
         abort(400, "Number of dice to roll must be between 2 and 6")
     # check presence of requested set into the db
     else:
-        return jsonify(asked_set.roll_set(request.json['dice_number']))
+        return jsonify(asked_set.roll_set(int(request.json['dice_number'])))
