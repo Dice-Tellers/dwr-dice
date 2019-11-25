@@ -6,4 +6,4 @@ GATEWAY_URL = "http://127.0.0.1:5000/"
 TEST_DB = 'sqlite:///:memory:'
 
 # Default database
-DEFAULT_DB = 'sqlite:///dice_service.db'
+DEFAULT_DB = 'sqlite:///dice-service.db'

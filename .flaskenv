@@ -1,2 +1,2 @@
 FLASK_APP=dice_service
-FLASK_DEBUG=True
+FLASK_DEBUG=0
